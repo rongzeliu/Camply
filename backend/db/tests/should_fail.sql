@@ -4,5 +4,5 @@ INSERT INTO camp (name) VALUES ('no code');
 
 -- Test 2: join_code differs between camps 
 -- Expected : ERROR ... duplicate key value violates unique constraint "camp_join_code_key"
-INSERT INTO camp (name, join_code) VALUES ('camp1', 'code1'); -- succeed
-INSERT INTO camp (name, join_code) VALUES ('camp2', 'code1'); -- fail 
+INSERT INTO camp (name, join_code, start_date, end_date) VALUES ('camp1', 'code1', '2027-07-01', '2027-07-07'); -- succeed
+INSERT INTO camp (name, join_code, start_date, end_date) VALUES ('camp2', 'code1', '2027-07-01', '2027-07-07'); -- fail 

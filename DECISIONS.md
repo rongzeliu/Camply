@@ -117,8 +117,8 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 ### D16. Time storage
 - **Status:** Provisional
 - **Why:** Store instants as `timestamptz`. Store the camp's IANA timezone on the camp and convert for display, since schedules are read as wall-clock time.
-- **Constraint:** `CHECK (ends_at > starts_at)`.
-- **Open:** may blocks in the same calendar overlap? If not, add an exclusion constraint on `tstzrange`.
+- **Constraint:** `CHECK (ends_at >= starts_at)`, allows events to be same day.
+- **Open:** may blocks in the same calendar overlap? If not, add an exclusion constraint on `tstzrange`. 
 
 ---
 
