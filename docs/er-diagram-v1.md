@@ -1,24 +1,29 @@
+# Camply: reference ER diagram
+
+Renders on GitHub automatically. In VS Code, install the "Markdown Preview Mermaid Support" extension, or paste the block into https://mermaid.live to zoom and pan.
+
+```mermaid
 erDiagram
   LEADER ||--o| ACCOUNT : "may have"
   LEADER ||--o{ CAMP_MEMBERSHIP : joins
   CAMP ||--o{ CAMP_MEMBERSHIP : has
   CAMP ||--o{ CALENDAR : has
-  CAMP ||--o{ CLASS : has
+  CAMP ||--o{ CAMP_CLASS : has
   CAMP ||--o{ STATION : has
   CAMP ||--o{ TEAM : has
   TEAM |o--o{ CAMP_MEMBERSHIP : "staffed by"
-  CLASS |o--o{ TEAM : "served by"
+  CAMP_CLASS |o--o{ TEAM : "served by"
   STATION |o--o{ TEAM : "staffed by"
   CALENDAR ||--o{ TIME_BLOCK : contains
   LEADER |o--o{ TIME_BLOCK : "responsible for"
   TIME_BLOCK ||--o{ RESOURCE : links
   TIME_BLOCK ||--o{ BLOCK_ASSIGNMENT : schedules
-  CLASS ||--o{ BLOCK_ASSIGNMENT : placed
+  CAMP_CLASS ||--o{ BLOCK_ASSIGNMENT : placed
   STATION ||--o{ BLOCK_ASSIGNMENT : hosts
   TIME_BLOCK ||--o{ LEADER_OVERRIDE : exceptions
   LEADER ||--o{ LEADER_OVERRIDE : moved
   STATION ||--o{ LEADER_OVERRIDE : destination
-  CLASS ||--o{ POINT_EVENT : earns
+  CAMP_CLASS ||--o{ POINT_EVENT : earns
   LEADER ||--o{ POINT_EVENT : awards
 
   LEADER {
@@ -52,7 +57,7 @@ erDiagram
     bigint class_id FK
     bigint station_id FK
   }
-  CLASS {
+  CAMP_CLASS {
     bigint id PK
     bigint camp_id FK
     text name
@@ -103,3 +108,4 @@ erDiagram
     text reason
     timestamptz created_at
   }
+```
