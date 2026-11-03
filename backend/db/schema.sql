@@ -1,0 +1,5 @@
+CREATE TABLE camp(
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    join_code TEXT UNIQUE NOT NULL
+);
