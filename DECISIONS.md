@@ -8,6 +8,18 @@ A running log of design decisions. Each entry has a status:
 
 Format per entry: decision, why, alternatives considered, when to revisit.
 
+### 2026-11-02: camp start and end can be same day 
+- **Decision**: End camp date and start camp date can be the same, so use >= when comparing
+- **Why**: To accomodate one-day activities
+
+### camp deletion 
+- **Decision**: Deleting the camp uses ON DELETE CASCADE on calendar
+- **Why**: When camps are deleted, the calendars should go with, since theres no need for it anymore 
+- **Alternatives**: Considered using RESTRICT, which means that all the calendars must be deleted before deleting camp, which is tedious 
+- **Revisit if**: Only when calendars themselves are deemed more important than the camp 
+
+### 
+
 ---
 
 ## 1. Principles
@@ -117,7 +129,7 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 ### D16. Time storage
 - **Status:** Provisional
 - **Why:** Store instants as `timestamptz`. Store the camp's IANA timezone on the camp and convert for display, since schedules are read as wall-clock time.
-- **Constraint:** `CHECK (ends_at >= starts_at)`, allows events to be same day.
+- **Constraint:** `CHECK (ends_at > starts_at)`.
 - **Open:** may blocks in the same calendar overlap? If not, add an exclusion constraint on `tstzrange`. 
 
 ---
