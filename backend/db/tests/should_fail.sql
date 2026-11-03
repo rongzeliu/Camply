@@ -13,4 +13,4 @@ INSERT INTO camp (name, join_code, start_date, end_date) VALUES ('fail_camp3', '
 
 -- Test 4: calendar must refer to a camp
 -- Expected: ERROR ... insert or update on table "calendar" violates foreign key constraint "calendar_camp_id_fkey"
-INSERT INTO calendar (camp_id, name) VALUES (0, 'dne_camp_calendar') 
+INSERT INTO calendar (camp_id, name) VALUES (0, 'dne_camp_calendar');

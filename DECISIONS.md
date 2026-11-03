@@ -18,7 +18,7 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 - **Alternatives**: Considered using RESTRICT, which means that all the calendars must be deleted before deleting camp, which is tedious 
 - **Revisit if**: Only when calendars themselves are deemed more important than the camp 
 
-### 
+### 2026-11-03: 
 
 ---
 
