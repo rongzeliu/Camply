@@ -40,3 +40,12 @@ INSERT INTO camp_membership (camp_id, leader_id, role)
     SELECT camp.id, leader.id, 'leader' 
     FROM camp, leader 
     WHERE join_code = 'P4.5' AND full_name = 'P4_leader';
+
+
+\warn '-- Test 5: team assigned to either class or station'
+-- Expected: INSERT 0 1
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('P5_camp', 'P5', '2027-07-01', '2027-07-07');
+INSERT INTO team (camp_id, name, class_id)
+    SELECT camp.id, 'Team', 0
+    FROM camp WHERE join_code = 'P5';

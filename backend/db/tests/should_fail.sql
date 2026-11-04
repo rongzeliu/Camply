@@ -54,7 +54,7 @@ INSERT INTO camp_membership (camp_id, leader_id, role)
 
 
 \warn '-- Test 7: camp membership with invalid role'
--- Expected: ERROR ... new row ... violates cehck constraint "camp_role_ok"
+-- Expected: ERROR ... new row ... violates check constraint "camp_role_ok"
 INSERT INTO camp (name, join_code, start_date, end_date)
     VALUES ('T7_camp', 'T7', '2027-07-01', '2027-07-07');
 INSERT INTO leader (full_name)
@@ -63,3 +63,21 @@ INSERT INTO camp_membership (camp_id, leader_id, role)
     SELECT camp.id, leader.id, 'invalid_role' 
     FROM camp, leader 
     WHERE join_code = 'T7' AND full_name = 'T7_leader';
+
+
+\warn '-- Test 8: team assigned to both station and class'
+-- Expected ERROR ... new row ... violates check constraint "team_assignment_ok"
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('T8_camp', 'T8', '2027-07-01', '2027-07-07');
+INSERT INTO team (camp_id, name, class_id, station_id)
+    SELECT camp.id, 'Team8', 0, 0
+    FROM camp WHERE join_code = 'T8';
+
+
+\warn '-- Test 9: team assigned to neither station and class'
+-- Expected ERROR ... new row ... violates check constraint "team_assignment_ok"
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('T9_camp', 'T9', '2027-07-01', '2027-07-07');
+INSERT INTO team (camp_id, name)
+    SELECT camp.id, 'Team9'
+    FROM camp WHERE join_code = 'T9';
