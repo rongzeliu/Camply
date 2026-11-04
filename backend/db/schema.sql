@@ -25,3 +25,17 @@ CREATE TABLE time_block(
     ends_at timestamptz NOT NULL,
     CONSTRAINT time_block_ok CHECK (ends_at >= starts_at)
 );
+
+CREATE TABLE leader(
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name text NOT NULL
+);
+
+CREATE TABLE camp_membership(
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    leader_id bigint NOT NULL REFERENCES leader(id) ON DELETE CASCADE,
+    PRIMARY KEY (camp_id, leader_id),
+    role text NOT NULL,
+    CONSTRAINT camp_role_ok CHECK (role IN ('csj', 'coord', 'leader')),
+    team_id bigint
+);
