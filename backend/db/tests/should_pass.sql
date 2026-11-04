@@ -22,3 +22,21 @@ INSERT INTO camp (name, join_code, start_date, end_date)
     VALUES ('T3_camp', 'Trashed_camp3', '2027-07-01', '2027-07-07');
 UPDATE camp SET deleted_at = now() WHERE join_code = 'Trashed_camp3';
 SELECT count(*) FROM active_camp WHERE join_code = 'Trashed_camp3'; 
+
+
+\warn '-- Test 4: same leader in two camps works'
+-- Expected: INSERT 0 1
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('P4_camp', 'P4', '2027-07-01', '2027-07-07');
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('P4_camp.5', 'P4.5', '2027-07-01', '2027-07-07');
+INSERT INTO leader (full_name)
+    VALUES ('P4_leader');
+INSERT INTO camp_membership (camp_id, leader_id, role)
+    SELECT camp.id, leader.id, 'leader' 
+    FROM camp, leader 
+    WHERE join_code = 'P4' AND full_name = 'P4_leader';
+INSERT INTO camp_membership (camp_id, leader_id, role)
+    SELECT camp.id, leader.id, 'leader' 
+    FROM camp, leader 
+    WHERE join_code = 'P4.5' AND full_name = 'P4_leader';

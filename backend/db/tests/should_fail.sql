@@ -35,3 +35,31 @@ INSERT INTO calendar (camp_id, name)
     SELECT id, 'T5_calendar' FROM camp WHERE join_code = 'T5';
 INSERT INTO time_block (calendar_id, title, starts_at, ends_at) 
     SELECT id, 'fail_block1', '2027-07-01 09:00-04', '2027-07-01 09:00-00' FROM calendar WHERE name = 'T5_calendar'; -- fail
+
+
+\warn '-- Test 6: same leader joining same camp twice'
+-- Expected: ERROR ... duplicate key value violates unique constraint "camp_membership_pkey"
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('T6_camp', 'T6', '2027-07-01', '2027-07-07');
+INSERT INTO leader (full_name)
+    VALUES ('T6_leader');
+INSERT INTO camp_membership (camp_id, leader_id, role)
+    SELECT camp.id, leader.id, 'leader' 
+    FROM camp, leader 
+    WHERE join_code = 'T6' AND full_name = 'T6_leader';
+INSERT INTO camp_membership (camp_id, leader_id, role)
+    SELECT camp.id, leader.id, 'leader' 
+    FROM camp, leader 
+    WHERE join_code = 'T6' AND full_name = 'T6_leader';
+
+
+\warn '-- Test 7: camp membership with invalid role'
+-- Expected: ERROR ... new row ... violates cehck constraint "camp_role_ok"
+INSERT INTO camp (name, join_code, start_date, end_date)
+    VALUES ('T7_camp', 'T7', '2027-07-01', '2027-07-07');
+INSERT INTO leader (full_name)
+    VALUES ('T7_leader');
+INSERT INTO camp_membership (camp_id, leader_id, role)
+    SELECT camp.id, leader.id, 'invalid_role' 
+    FROM camp, leader 
+    WHERE join_code = 'T7' AND full_name = 'T7_leader';
