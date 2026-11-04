@@ -39,3 +39,13 @@ CREATE TABLE camp_membership(
     CONSTRAINT camp_role_ok CHECK (role IN ('csj', 'coord', 'leader')),
     team_id bigint
 );
+
+CREATE TABLE team(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    name text NOT NULL,
+    class_id bigint,
+    station_id bigint,
+    CONSTRAINT team_assignment_ok CHECK (num_nonnulls(class_id, station_id) = 1)
+);
+
