@@ -4,8 +4,12 @@ CREATE TABLE camp(
     join_code TEXT UNIQUE NOT NULL,
     start_date date NOT NULL,
     end_date date NOT NULL,
+    deleted_at timestamptz,
     CONSTRAINT camp_date_ok CHECK (end_date >= start_date)
 );
+
+CREATE VIEW active_camp AS
+    SELECT * FROM camp WHERE deleted_at IS NULL;
 
 CREATE TABLE calendar(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
