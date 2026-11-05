@@ -37,7 +37,7 @@ CREATE TABLE camp_membership(
     PRIMARY KEY (camp_id, leader_id),
     role text NOT NULL,
     CONSTRAINT camp_role_ok CHECK (role IN ('csj', 'coord', 'leader')),
-    team_id bigint
+    team_id bigint 
 );
 
 CREATE TABLE team(
@@ -61,6 +61,7 @@ CREATE TABLE station(
     name text NOT NULL
 );
 
+
 ALTER TABLE team
     ADD CONSTRAINT team_class_id_fkey
     FOREIGN KEY (class_id) REFERENCES camp_class(id) ON DELETE SET NULL;
@@ -68,3 +69,7 @@ ALTER TABLE team
 ALTER TABLE team
     ADD CONSTRAINT station_camp_id_fkey
     FOREIGN KEY (station_id) REFERENCES station(id) ON DELETE SET NULL;
+
+ALTER TABLE camp_membership
+    ADD CONSTRAINT camp_membership_team_id_fkey
+    FOREIGN KEY (team_id) REFERENCES team(id) ON DELETE SET NULL;
