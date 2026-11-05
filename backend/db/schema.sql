@@ -68,7 +68,14 @@ CREATE TABLE block_assignment(
     station_id bigint REFERENCES station(id) ON DELETE CASCADE NOT NULL
 );
 
-
+CREATE TABLE resource(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    time_block_id bigint NOT NULL REFERENCES time_block(id) ON DELETE CASCADE,
+    kind text NOT NULL,
+    CONSTRAINT resource_kind_ok CHECK (kind IN ('slides', 'materials')), 
+    label text NOT NULL,
+    url text NOT NULL
+);
 
 
 ALTER TABLE team
