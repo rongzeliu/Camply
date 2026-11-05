@@ -95,6 +95,14 @@ CREATE TABLE account(
     email text NOT NULL UNIQUE
 );
 
+CREATE TABLE leader_override(
+    time_block_id bigint NOT NULL REFERENCES time_block(id) ON DELETE CASCADE,
+    leader_id bigint NOT NULL REFERENCES leader(id) ON DELETE CASCADE,
+    PRIMARY KEY (time_block_id, leader_id),
+    station_id bigint REFERENCES station(id) ON DELETE SET NULL,
+    note text
+);
+
 
 ALTER TABLE team
     ADD CONSTRAINT team_class_id_fkey
