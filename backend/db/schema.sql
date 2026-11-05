@@ -49,3 +49,22 @@ CREATE TABLE team(
     CONSTRAINT team_assignment_ok CHECK (num_nonnulls(class_id, station_id) = 1)
 );
 
+CREATE TABLE camp_class(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    name text NOT NULL
+);
+
+CREATE TABLE station(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    name text NOT NULL
+);
+
+ALTER TABLE team
+    ADD CONSTRAINT team_class_id_fkey
+    FOREIGN KEY (class_id) REFERENCES camp_class(id) ON DELETE SET NULL;
+
+ALTER TABLE team
+    ADD CONSTRAINT station_camp_id_fkey
+    FOREIGN KEY (station_id) REFERENCES station(id) ON DELETE SET NULL;

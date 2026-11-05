@@ -8,7 +8,8 @@ A running log of design decisions. Each entry has a status:
 
 Format per entry: decision, why, alternatives considered, when to revisit.
 
-### 2026-11-02: camp start and end can be same day 
+### 2026-11-02: 
+### camp start and end can be same day 
 - **Decision**: End camp date and start camp date can be the same, so use >= when comparing
 - **Why**: To accomodate one-day activities
 
@@ -18,13 +19,17 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 - **Alternatives**: Considered using RESTRICT, which means that all the calendars must be deleted before deleting camp, which is tedious 
 - **Revisit if**: Only when calendars themselves are deemed more important than the camp 
 
-### 2026-11-03: trash bin design 
+### 2026-11-03: 
+### trash bin design 
 - **Decision**: Choosing to delete a camp first assigns it a deleted_at label which will track when it was deleted
 - **Why**: Since camps contain lots of info, they can be viewed in the recently deleted bin in case user wants to retrieve it again
 
 ### active camp
 - **Decision**: created a new filter for camps that are not in the recently deleted bin
 - **Why**: This is to avoid recently deleted bins from showing up in queries
+
+### 2026-11-04: 
+### 
 
 ---
 
