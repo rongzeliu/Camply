@@ -29,7 +29,7 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 - **Why**: This is to avoid recently deleted bins from showing up in queries
 
 ### 2026-11-04: 
-### 
+### finished rest of ER diagram
 
 ---
 
