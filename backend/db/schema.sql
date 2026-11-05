@@ -88,6 +88,13 @@ CREATE TABLE point_event(
     created_at timestamptz NOT NULL DEFAULT now()
 );
 
+CREATE TABLE account(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    leader_id bigint NOT NULL REFERENCES leader(id) ON DELETE CASCADE,
+    google_sub text NOT NULL UNIQUE,
+    email text NOT NULL UNIQUE
+);
+
 
 ALTER TABLE team
     ADD CONSTRAINT team_class_id_fkey
