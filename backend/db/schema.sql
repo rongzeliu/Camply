@@ -115,3 +115,9 @@ ALTER TABLE team
 ALTER TABLE camp_membership
     ADD CONSTRAINT camp_membership_team_id_fkey
     FOREIGN KEY (team_id) REFERENCES team(id) ON DELETE SET NULL;
+
+ALTER TABLE time_block
+    ADD COLUMN responsible_leader_id bigint REFERENCES leader(id) ON DELETE SET NULL;
+
+ALTER TABLE time_block
+    ADD COLUMN description text;
