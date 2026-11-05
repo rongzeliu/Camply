@@ -77,6 +77,17 @@ CREATE TABLE resource(
     url text NOT NULL
 );
 
+CREATE TABLE point_event(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    class_id bigint NOT NULL REFERENCES camp_class(id) ON DELETE RESTRICT,
+    awarded_by bigint NOT NULL REFERENCES leader(id) ON DELETE RESTRICT,
+    time_block_id bigint REFERENCES time_block(id) ON DELETE SET NULL,
+    amount int NOT NULL,
+    CONSTRAINT point_amount_ok CHECK (amount != 0),
+    reason text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+
 
 ALTER TABLE team
     ADD CONSTRAINT team_class_id_fkey
