@@ -61,6 +61,15 @@ CREATE TABLE station(
     name text NOT NULL
 );
 
+CREATE TABLE block_assignment(
+    time_block_id bigint REFERENCES time_block(id) ON DELETE CASCADE,
+    class_id bigint REFERENCES camp_class(id) ON DELETE CASCADE,
+    PRIMARY KEY (time_block_id, class_id),
+    station_id bigint REFERENCES station(id) ON DELETE CASCADE NOT NULL
+);
+
+
+
 
 ALTER TABLE team
     ADD CONSTRAINT team_class_id_fkey
