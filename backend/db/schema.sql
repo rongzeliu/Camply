@@ -17,36 +17,20 @@ CREATE TABLE calendar(
     name TEXT NOT NULL
 );
 
+CREATE TABLE leader(
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name text NOT NULL
+);
+
 CREATE TABLE time_block(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     calendar_id bigint NOT NULL REFERENCES calendar(id) ON DELETE CASCADE,
     title text NOT NULL,
     starts_at timestamptz NOT NULL,
     ends_at timestamptz NOT NULL,
-    CONSTRAINT time_block_ok CHECK (ends_at >= starts_at)
-);
-
-CREATE TABLE leader(
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    full_name text NOT NULL
-);
-
-CREATE TABLE camp_membership(
-    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
-    leader_id bigint NOT NULL REFERENCES leader(id) ON DELETE CASCADE,
-    PRIMARY KEY (camp_id, leader_id),
-    role text NOT NULL,
-    CONSTRAINT camp_role_ok CHECK (role IN ('csj', 'coord', 'leader')),
-    team_id bigint 
-);
-
-CREATE TABLE team(
-    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
-    name text NOT NULL,
-    class_id bigint,
-    station_id bigint,
-    CONSTRAINT team_assignment_ok CHECK (num_nonnulls(class_id, station_id) = 1)
+    CONSTRAINT time_block_ok CHECK (ends_at >= starts_at),
+    responsible_leader_id bigint REFERENCES leader(id) ON DELETE SET NULL,
+    description text
 );
 
 CREATE TABLE camp_class(
@@ -61,11 +45,29 @@ CREATE TABLE station(
     name text NOT NULL
 );
 
+CREATE TABLE team(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    name text NOT NULL,
+    class_id bigint,
+    station_id bigint,
+    CONSTRAINT team_assignment_ok CHECK (num_nonnulls(class_id, station_id) = 1)
+);
+
+CREATE TABLE camp_membership(
+    camp_id bigint NOT NULL REFERENCES camp(id) ON DELETE CASCADE,
+    leader_id bigint NOT NULL REFERENCES leader(id) ON DELETE CASCADE,
+    PRIMARY KEY (camp_id, leader_id),
+    role text NOT NULL,
+    CONSTRAINT camp_role_ok CHECK (role IN ('csj', 'coord', 'leader')),
+    team_id bigint 
+);
+
 CREATE TABLE block_assignment(
     time_block_id bigint REFERENCES time_block(id) ON DELETE CASCADE,
     class_id bigint REFERENCES camp_class(id) ON DELETE CASCADE,
     PRIMARY KEY (time_block_id, class_id),
-    station_id bigint REFERENCES station(id) ON DELETE CASCADE NOT NULL
+    station_id bigint NOT NULL REFERENCES station(id) ON DELETE CASCADE
 );
 
 CREATE TABLE resource(
@@ -115,9 +117,3 @@ ALTER TABLE team
 ALTER TABLE camp_membership
     ADD CONSTRAINT camp_membership_team_id_fkey
     FOREIGN KEY (team_id) REFERENCES team(id) ON DELETE SET NULL;
-
-ALTER TABLE time_block
-    ADD COLUMN responsible_leader_id bigint REFERENCES leader(id) ON DELETE SET NULL;
-
-ALTER TABLE time_block
-    ADD COLUMN description text;

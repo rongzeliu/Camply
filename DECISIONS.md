@@ -31,6 +31,15 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 ### 2026-11-04: 
 ### finished rest of ER diagram
 
+### 2026-11-05:
+### models.py
+- **Decision**: using SQLAlchemy, wrote the database in python so that it translates later commands into sql to search the database
+
+### interesting thing
+- Discovered that I didn't need to write any constraint checks nor on delete scenarios because Postgres already handles that for me and is already defined in schema.sql!
+
+
+
 ---
 
 ## 1. Principles
