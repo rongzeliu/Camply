@@ -20,5 +20,18 @@ class CampCreate(BaseModel):
     @classmethod
     def must_not_be_empty(cls, v):
         if not v.strip():
-            raise ValueError("this field must not be empty")
+            raise ValueError("field must not be empty")
         return v.strip()
+
+class CampUpdate(BaseModel):
+    name: str | None = None
+    join_code: str | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+    
+    @field_validator("name", "join_code")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if v is not None and not v.strip():
+            raise ValueError("field must not be empty")
+        return v.strip() if v else v
