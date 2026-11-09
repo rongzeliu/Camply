@@ -9,3 +9,11 @@ class CampResponse(BaseModel):
     end_date: date
     
     model_config = {"from_attributes": True}
+    
+class CampCreate(BaseModel):
+    name: str
+    join_code: str
+    start_date: date
+    end_date: date
+    
+    model_config = {"from_attributes": True}
