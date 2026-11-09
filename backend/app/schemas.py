@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import date
 
 class CampResponse(BaseModel):
@@ -16,4 +16,9 @@ class CampCreate(BaseModel):
     start_date: date
     end_date: date
     
-    model_config = {"from_attributes": True}
+    @field_validator("name", "join_code")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if not v.strip():
+            raise ValueError("this field must not be empty")
+        return v.strip()
