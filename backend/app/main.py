@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.dependencies import get_db
 from app import models, schemas
@@ -21,3 +21,10 @@ def create_camps(camp: schemas.CampCreate, db : Session = Depends(get_db)):
     db.commit()
     db.refresh(db_camp)
     return db_camp
+
+@camply.get("/camps/{camp_id}", response_model=schemas.CampResponse)
+def get_camps(camp_id: int, db : Session = Depends(get_db)):
+    camp = db.query(models.Camp).filter(models.Camp.id == camp_id).filter(models.Camp.deleted_at == None).first()
+    if camp is None:
+        raise HTTPException(status_code = 404, detail = "Camp not found")
+    return camp
