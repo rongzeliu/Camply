@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from app.dependencies import get_db
 from app import models, schemas
 from typing import List
+from datetime import datetime
 
 camply = FastAPI()
 
@@ -43,5 +44,15 @@ def put_camps(camp_id: int, camp_update: schemas.CampUpdate, db: Session = Depen
         db.refresh(camp)
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code = 402, detail = "Camp with join code that already exists")
+        raise HTTPException(status_code = 409, detail = "Camp with join code that already exists")
     return camp
+
+@camply.delete("/camps/{camp_id}")
+def delete_camps(camp_id: int, db: Session = Depends(get_db)):
+    camp = db.query(models.Camp).filter(models.Camp.id == camp_id).filter(models.Camp.deleted_at == None).first()
+    if camp is None:
+        raise HTTPException(status_code = 404, detail = "Camp not found")
+    camp.deleted_at = datetime.now()
+    db.commit()
+    return {"message" : "Camp moved to trash"}
+    
