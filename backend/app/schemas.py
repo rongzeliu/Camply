@@ -54,3 +54,22 @@ class LeaderCreate(BaseModel):
         if not v.strip():
             raise ValueError("field must not be empty")
         return v.strip() 
+    
+
+# Calendar
+class CalendarResponse(BaseModel):
+    id: int 
+    camp_id: int
+    name: str
+    
+    model_config = {"from_attributes": True}
+    
+class CalendarCreate(BaseModel):
+    name: str
+    
+    @field_validator("name")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if not v.strip():
+            raise ValueError("field must not be empty")
+        return v.strip()
