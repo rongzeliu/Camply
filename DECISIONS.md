@@ -69,6 +69,8 @@ Format per entry: decision, why, alternatives considered, when to revisit.
     5. then schemas uses pydantic to shape the response 
     6. finally a HTTP response is outputted
 
+### Explaining why db.refresh is needed
+- So when the db_leader is created, only the full_name variable is set by the user, and the id should be set automatically. When the commit happens, the id of the leader is None in python although Postgres assigns it a value, so refreshing sends a SELECT query to Postgres, which returns and assigns an id to the leader 
 
 ---
 

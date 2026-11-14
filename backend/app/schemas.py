@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 from datetime import date
 
+# Camp 
 class CampResponse(BaseModel):
     id: int 
     name: str 
@@ -35,3 +36,21 @@ class CampUpdate(BaseModel):
         if v is not None and not v.strip():
             raise ValueError("field must not be empty")
         return v.strip() if v else v
+    
+
+# Leader
+class LeaderResponse(BaseModel):
+    id: int 
+    full_name: str
+    
+    model_config = {"from_attributes": True}
+    
+class LeaderCreate(BaseModel):
+    full_name: str
+    
+    @field_validator("full_name")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if not v.strip():
+            raise ValueError("field must not be empty")
+        return v.strip() 
