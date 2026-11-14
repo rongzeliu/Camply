@@ -38,6 +38,36 @@ Format per entry: decision, why, alternatives considered, when to revisit.
 ### interesting thing
 - Discovered that I didn't need to write any constraint checks nor on delete scenarios because Postgres already handles that for me and is already defined in schema.sql!
 
+### 2026-11-09:
+### Finished creating a scalable structure for the backend
+- The base of the backend is done! Before moving on and adding all the different endpoints, right now i only have camp, I will explain in my own words how the structure connects altogether 
+
+### 2026-11-14:
+### Explaining the structure
+- Speaking from a very broad lens, the backend uses SQLAlchemy as an ORM (Object-Relational Mapper) to interact with and store data inside PostgreSQL 
+- The main connector is through database.py, which holds the engine, sessionlocal and base 
+    - Engine: this is the part that actually connects the Postgre database 
+    - SessionLocal: this piece creates a new environment(?) which is used to make changes without changing the database directly and can be safely used and reverted 
+    - Base: this tracks which python classes map to which tables so Alembic can compare them against the real database 
+- models.py imports Base from database.py and uses it to create the SQL tables in python
+- schemas.py defines the shape of JSON for both input schemas and output schemas and Pydantic validates both the structure and the value
+- dependencies.py imports SessionLocal from database.py and opens a new session for each action that the application performs and then closes it once its done
+- routers/camps.py contains the actual logic for each action that is performed on camp in the database
+    - importing models to query the database
+    - using router, .get, .post, etc. to select the action to be performed
+    - importing schemas to validate the action
+    - importing depencencies to open a database session
+    - importing APIRouter to select the route of the query  
+    - raising HTTPExceptions corresponding to invalid checks
+- main.py is the first entrypoint, creating the fastapi app and registers the routers, which bring their own routes
+
+- In use
+    1. an HTTP request will flow through main.py to find the right router
+    2. then selects the right .py file in the routers folder which will run an endpoint function 
+    3. then dependencies is called to open a new get_db session 
+    4. then models uses SQLAlchemy to query PostgreSQL
+    5. then schemas uses pydantic to shape the response 
+    6. finally a HTTP response is outputted
 
 
 ---
