@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator
-from datetime import date
+from datetime import date, datetime
 
 # Camp 
 class CampResponse(BaseModel):
@@ -73,3 +73,46 @@ class CalendarCreate(BaseModel):
         if not v.strip():
             raise ValueError("field must not be empty")
         return v.strip()
+    
+
+# Time Block
+class TimeBlockResponse(BaseModel):
+    id: int
+    calendar_id: int 
+    title: str 
+    starts_at: datetime
+    ends_at: datetime
+    responsible_leader_id: int | None = None
+    description: str | None = None 
+    
+    model_config = {"from_attributes": True}
+    
+class TimeBlockCreate(BaseModel):
+    title: str 
+    starts_at: datetime
+    ends_at: datetime
+    responsible_leader_id: int | None = None
+    description: str | None = None 
+    
+    @field_validator("title")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if not v.strip():
+            raise ValueError("field must not be empty")
+        return v.strip()
+
+class TimeBlockUpdate(BaseModel):
+    title: str | None = None
+    starts_at: datetime | None = None
+    ends_at: datetime | None = None
+    responsible_leader_id: int | None = None
+    description: str | None = None
+    
+    @field_validator("title")
+    @classmethod
+    def must_not_be_empty(cls, v):
+        if v is not None and not v.strip():
+            raise ValueError("field must not be empty")
+        return v.strip() if v else v
+    
+    

@@ -22,7 +22,6 @@ class Leader(Base):
     __tablename__ = "leader"
     id = Column(BigInteger, primary_key = True)
     full_name = Column(Text, nullable = False)
-    
 
 class TimeBlock(Base):
     __tablename__ = "time_block"
